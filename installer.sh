@@ -21,7 +21,7 @@ tar -xvf fx.tar.xz
 rm fx.tar.xz
 
 echo "Installing git"
-apr-get install git -y
+apt-get install git -y
 
 echo "Downloading cfx-server-data"
 cd ~
@@ -122,6 +122,9 @@ ExecStart=/usr/bin/fivem_startserver.sh
 [Install]
 WantedBy=multi-user.target
 EOF
+
+echo "Installing tmux"
+apt-get install tmux -y
 
 echo "Creating FiveM server start script"
 
