@@ -20,6 +20,9 @@ echo "Extracting data from downloaded files"
 tar -xvf fx.tar.xz
 rm fx.tar.xz
 
+echo "Installing git"
+apr-get install git -y
+
 echo "Downloading cfx-server-data"
 cd ~
 git clone https://github.com/citizenfx/cfx-server-data
