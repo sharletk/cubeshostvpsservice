@@ -13,14 +13,16 @@ echo "Setting up wget"
 apt-get install wget -y
 
 echo "Downloading FiveM Server"
-wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/FIVEM_ARTIFACT_VERSION/fx.tar.xz ~
+cd ~
+wget https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz
 
 echo "Extracting data from downloaded files"
 tar -xvf fx.tar.xz
 rm fx.tar.xz
 
 echo "Downloading cfx-server-data"
-git clone https://github.com/citizenfx/cfx-server-data ~
+cd ~
+git clone https://github.com/citizenfx/cfx-server-data
 
 echo "Creating server.cfg"
 
