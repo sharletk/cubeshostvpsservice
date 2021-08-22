@@ -4,7 +4,7 @@ FIVEM_ARTIFACT_VERSION=4394-572b000db3f5a323039e0915dac64641d1db408e
 echo "Updating and upgrading apt"
 apt-get update -y && apt-get upgrade -y
 
-echo "Installong and setting up firewall"
+echo "Installing and setting up firewall"
 apt-get install ufw -y
 ufw allow 30110
 ufw allow 30120
