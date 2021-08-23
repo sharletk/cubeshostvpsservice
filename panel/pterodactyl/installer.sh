@@ -1,29 +1,17 @@
 #!/bin/bash
 
-# Colors for the installer
-reset=$(tput sgr0)
-bold=$(tput bold)
-black=$(tput setaf 0)
-blue=$(tput setaf 4)
-bgblue=$(tput setab 4)
+INSTALLER_SCRIPT="installer/main.sh"
+. $INSTALLER_SCRIPT
 
 # Logo
-clear
-echo "${blue}${bold}"
-echo "  ____  _                     _            _         _ "
-echo " |  _ \| |_ ___ _ __ ___   __| | __ _  ___| |_ _   _| |"
-echo $" | |_) | __/ _ \ '__/ _ \ / _\` |/ _\` |/ __| __| | | | |"
-echo " |  __/| ||  __/ | | (_) | (_| | (_| | (__| |_| |_| | |"
-echo " |_|    \__\___|_|  \___/ \__,_|\__,_|\___|\__|\__, |_|"
-echo "                                               |___/   "
-echo "${reset}"
-sleep 3s
+checkRoot
+conlogo
+connotice "Starting up script..."
+sleep 3
 
 # Basic questions
 clear
-echo "${bgblue}${black}${bold}"
-echo "Basic questions for the user..."
-echo "${reset}"
+coninfo "Basic questions for the user..."
 sleep 1s
 
 dbPass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
@@ -63,9 +51,7 @@ done
 
 # Update and upgrade machine
 clear
-echo "${bgblue}${black}${bold}"
-echo "Base setup..."
-echo "${reset}"
+coninfo "Base setup..."
 sleep 1s
 
 apt-get -y update && apt-get -y upgrade
@@ -78,18 +64,14 @@ apt-get -y install php8.0 php8.0-{cli,gd,mysql,pdo,mbstring,tokenizer,bcmath,xml
 
 # Installing composer
 clear
-echo "${bgblue}${black}${bold}"
-echo "Installing composer..."
-echo "${reset}"
+coninfo "Installing composer..."
 sleep 1s
 
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Setting up folders and files for pterodactyl
 clear
-echo "${bgblue}${black}${bold}"
-echo "Setting up folders and files..."
-echo "${reset}"
+coninfo "Setting up folders and files..."
 sleep 1s
 
 mkdir -p /var/www/pterodactyl
@@ -102,9 +84,7 @@ cp .env.example .env
 
 # Setting up mariadb user and database
 clear
-echo "${bgblue}${black}${bold}"
-echo "Setting up mariadb user and database..."
-echo "${reset}"
+coninfo "Setting up mariadb user and database..."
 sleep 1s
 
 mysql -uroot << EOF
@@ -117,9 +97,7 @@ EOF
 
 # Running php commands for application
 clear
-echo "${bgblue}${black}${bold}"
-echo "Running artisan and composer commands for application..."
-echo "${reset}"
+coninfo "Running artisan and composer commands for application..."
 sleep 1s
 
 export COMPOSER_ALLOW_SUPERUSER=1; composer install --no-dev --optimize-autoloader;
@@ -127,9 +105,7 @@ php artisan key:generate --force
 
 # Environment configuration
 clear
-echo "${bgblue}${black}${bold}"
-echo "Setting up environment configuration..."
-echo "${reset}"
+coninfo "Setting up environment configuration..."
 sleep 1s
 
 if [[ "$userSSL" =~ ^[Yy]$ ]]; then
@@ -185,18 +161,14 @@ fi
 
 # Database setup
 clear
-echo "${bgblue}${black}${bold}"
-echo "Running migrations and seeders..."
-echo "${reset}"
+coninfo "Running migrations and seeders..."
 sleep 1s
 
 php artisan migrate --seed --force
 
 # Crontab configuration
 clear
-echo "${bgblue}${black}${bold}"
-echo "Crontab configuration..."
-echo "${reset}"
+coninfo "Crontab configuration..."
 sleep 1s
 
 crontab -l > mycron
@@ -206,9 +178,7 @@ rm mycron
 
 # Queue worker
 clear
-echo "${bgblue}${black}${bold}"
-echo "Queue worker..."
-echo "${reset}"
+coninfo "Queue worker..."
 sleep 1s
 
 cat > /lib/systemd/system/pteroq.service << EOF
@@ -232,9 +202,7 @@ systemctl enable --now pteroq.service
 
 # Create first admin user
 clear
-echo "${bgblue}${black}${bold}"
-echo "Create first user..."
-echo "${reset}"
+coninfo "Create first administrator user..."
 sleep 1s
 
 createUser=$(expect -c "
@@ -258,9 +226,7 @@ echo "$createUser"
 
 # Setup webserver
 clear
-echo "${bgblue}${black}${bold}"
-echo "Setup webserver..."
-echo "${reset}"
+coninfo "Setup webserver..."
 sleep 1s
 
 systemctl stop apache2
@@ -397,7 +363,7 @@ systemctl restart nginx
 
 # Finished
 clear
-echo "${blue}***********************************************************"
+echo "***********************************************************"
 echo "                    SETUP COMPLETE"
 echo "***********************************************************"
 echo ""
@@ -409,4 +375,4 @@ echo " MariaDB pass: $dbPass"
 echo ""
 echo "***********************************************************"
 echo "          DO NOT LOSE AND KEEP SAFE THIS DATA"
-echo "***********************************************************${reset}"
+echo "***********************************************************"
