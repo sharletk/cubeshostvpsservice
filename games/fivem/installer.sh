@@ -6,8 +6,11 @@ apt-get update -y && apt-get upgrade -y
 
 echo "Installing and setting up firewall"
 apt-get install ufw -y
+ufw enable
+ufw allow OpenSSH
 ufw allow 30110
 ufw allow 30120
+ufw reload
 
 echo "Setting up wget"
 apt-get install wget -y
