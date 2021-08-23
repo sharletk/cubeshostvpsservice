@@ -1,5 +1,5 @@
 #!/bin/bash
-# Main Installer
+### Main Installer ###
 INSTALLER_SCRIPT="installer/main.sh"
 . $INSTALLER_SCRIPT
 
@@ -8,12 +8,13 @@ conlogo
 connotice Starting up script..
 sleep 3
 
-# FiveM Installer
+### FiveM Installer ###
 FIVEM_ARTIFACT_VERSION=4394-572b000db3f5a323039e0915dac64641d1db408e
 
 coninfo Updating and upgrading apt
 apt-get update -y && apt-get upgrade -y
 
+# Install & Setup UFW Firewall
 coninfo Installing and setting up firewall
 apt-get install ufw -y
 echo 'y' | ufw enable
@@ -22,9 +23,11 @@ ufw allow 30110
 ufw allow 30120
 ufw reload
 
+# Install WGET
 coninfo Setting up wget
 apt-get install wget -y
 
+# Download FiveM Server
 connotice Downloading FiveM Server
 cd ~
 wget "https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz"
@@ -33,14 +36,17 @@ coninfo Extracting data from downloaded files
 tar -xvf fx.tar.xz
 rm fx.tar.xz
 
+# Install GIT 
 coninfo Installing git
 apt-get install git -y
 
+# Download cfx-server-data
 connotice Downloading cfx-server-data
 cd ~
 git clone https://github.com/citizenfx/cfx-server-data
 mv ~/cfx-server-data/resources ~
 
+# Create configuration file
 conlog Creating server.cfg
 cat > server.cfg << EOF
 # Only change the IP if you're using a server with multiple network interfaces, otherwise change the port only.
@@ -121,6 +127,7 @@ set steam_webApiKey ""
 sv_licenseKey changeme
 EOF
 
+# Create systemd service file
 conwarn Setting up server for starting during boot
 cat > /lib/systemd/system/fivem.service << EOF
 [Unit] 
@@ -136,9 +143,11 @@ ExecStop=/usr/bin/fivem_stopserver.sh
 WantedBy=multi-user.target
 EOF
 
+# Install TMUX
 coninfo Installing tmux
 apt-get install tmux -y
 
+# FiveM start script
 conwarn Creating FiveM server start script
 cat > /usr/bin/fivem_startserver.sh << EOF
 #!/bin/bash
@@ -148,6 +157,7 @@ tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
 EOF
 chmod +x /usr/bin/fivem_startserver.sh
 
+# FiveM stop script
 conwarn Creating FiveM server stop script
 cat > /usr/bin/fivem_stopserver.sh << EOF
 #!/bin/bash
@@ -156,17 +166,26 @@ tmux kill-session -t "FiveM_Server"
 EOF
 chmod +x /usr/bin/fivem_stopserver.sh
 
+# Reload systemd daemon
 conemergency Reloading systemd daemon
 systemctl daemon-reload
 
+# Enable service file
 connotice Enabling fivem service on boot
 systemctl enable fivem
 
+# Cleanup
+coninfo Cleaning up
+cd ~
+rm -rf cubeshostvpsservice-master master.zip cfx-server-data
+
 sleep 1
 
+# Start service
 conlog Starting FiveM Server
 systemctl start fivem
 
+# Final message
 VPS_IP=$( hostname -I | cut -f2 -d' ' )
 printf "
 # Server successfully created and ready for use.

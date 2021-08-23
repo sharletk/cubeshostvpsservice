@@ -1,5 +1,5 @@
 #!/bin/bash
-
+### Main Installer ###
 INSTALLER_SCRIPT="installer/main.sh"
 . $INSTALLER_SCRIPT
 
@@ -8,6 +8,7 @@ conlogo
 connotice "Starting up script..."
 sleep 3
 
+### Docker Installer ###
 # Update the system
 clear
 coninfo "Updating the server..."

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+### Main Installer ###
 INSTALLER_SCRIPT="installer/main.sh"
 . $INSTALLER_SCRIPT
 
@@ -9,6 +9,7 @@ conlogo
 connotice "Starting up script..."
 sleep 3
 
+### Pterodactyl Installer ###
 # Basic questions
 clear
 coninfo "Basic questions for the user..."
