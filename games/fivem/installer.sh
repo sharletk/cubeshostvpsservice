@@ -160,14 +160,15 @@ sleep 1
 conlog Starting FiveM Server
 systemctl start fivem
 
-echo -e "
+VPS_IP=$(hostname -I | cut -f2 -d' ')
+printf "
 # Server successfully created and ready for use.
 # Please add in the license key and other crucial information to get it ready and then restart the server.
 
 # Server Information #
 ──────────────────────────────
   Server running on..
-    IP Address: 
+    IP Address: ${VPS_IP}
     Port: 30120
 ──────────────────────────────
 
