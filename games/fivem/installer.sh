@@ -10,10 +10,10 @@ sleep 3
 # FiveM Installer
 FIVEM_ARTIFACT_VERSION=4394-572b000db3f5a323039e0915dac64641d1db408e
 
-echo "Updating and upgrading apt"
+coninfo Updating and upgrading apt
 apt-get update -y && apt-get upgrade -y
 
-echo "Installing and setting up firewall"
+coninfo Installing and setting up firewall
 apt-get install ufw -y
 echo 'y' | ufw enable
 ufw allow OpenSSH
@@ -21,25 +21,25 @@ ufw allow 30110
 ufw allow 30120
 ufw reload
 
-echo "Setting up wget"
+coninfo Setting up wget
 apt-get install wget -y
 
-echo "Downloading FiveM Server"
+connotice Downloading FiveM Server
 cd ~
 wget "https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz"
 
-echo "Extracting data from downloaded files"
+coninfo Extracting data from downloaded files
 tar -xvf fx.tar.xz
 rm fx.tar.xz
 
-echo "Installing git"
+coninfo Installing git
 apt-get install git -y
 
-echo "Downloading cfx-server-data"
+connotice Downloading cfx-server-data
 cd ~
 git clone https://github.com/citizenfx/cfx-server-data
 
-echo "Creating server.cfg"
+conlog Creating server.cfg
 
 cat > server.cfg << EOF
 # Only change the IP if you're using a server with multiple network interfaces, otherwise change the port only.
@@ -120,7 +120,7 @@ set steam_webApiKey ""
 sv_licenseKey changeme
 EOF
 
-echo "Setting up server for starting during boot"
+conwarn Setting up server for starting during boot
 
 cat > /lib/systemd/system/fivem.service << EOF
 [Unit] 
@@ -135,10 +135,10 @@ ExecStart=/usr/bin/fivem_startserver.sh
 WantedBy=multi-user.target
 EOF
 
-echo "Installing tmux"
+coninfo Installing tmux
 apt-get install tmux -y
 
-echo "Creating FiveM server start script"
+conwarn Creating FiveM server start script
 
 cat > /usr/bin/fivem_startserver.sh << EOF
 #!/bin/bash
@@ -149,13 +149,38 @@ EOF
 
 chmod +x /usr/bin/fivem_startserver.sh
 
-echo "Reloading systemd daemon"
+conemergency Reloading systemd daemon
 systemctl daemon-reload
 
-echo "Enabling fivem service on boot"
+connotice Enabling fivem service on boot
 systemctl enable fivem
 
 sleep 1
 
-echo "Starting FiveM Server"
+conlog Starting FiveM Server
 systemctl start fivem
+
+echo -e "
+# Server successfully created and ready for use.
+# Please add in the license key and other crucial information to get it ready and then restart the server.
+
+# Server Information #
+──────────────────────────────
+  Server running on..
+    IP Address: 
+    Port: 30120
+──────────────────────────────
+
+# Commands to start, stop and restart server from VPS. #
+  • Start
+    systemctl start fivem
+
+  • Stop
+    systemctl stop fivem
+
+  • Restart
+    systemctl restart fivem
+    
+  • Status
+    systemctl status fivem
+"
