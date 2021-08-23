@@ -3,6 +3,7 @@
 INSTALLER_SCRIPT="installer/main.sh"
 . $INSTALLER_SCRIPT
 
+checkRoot
 conlogo
 connotice Starting up script..
 sleep 3
