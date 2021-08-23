@@ -130,6 +130,7 @@ Description=FiveM Server
 Type=forking
 User=root
 ExecStart=/usr/bin/fivem_startserver.sh
+ExecStop=/usr/bin/fivem_stopserver.sh
 
 [Install]
 WantedBy=multi-user.target
@@ -147,6 +148,14 @@ tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
 EOF
 
+conwarn Creating FiveM server stop script
+
+cat > /usr/bin/fivem_stopserver.sh << EOF
+#!/bin/bash
+tmux send-keys -t FiveM_Server C-c
+tmux kill-session -t "FiveM_Server"
+EOF
+
 chmod +x /usr/bin/fivem_startserver.sh
 
 conemergency Reloading systemd daemon
@@ -160,7 +169,7 @@ sleep 1
 conlog Starting FiveM Server
 systemctl start fivem
 
-VPS_IP=$(hostname -I | cut -f2 -d' ')
+VPS_IP=$( hostname -I | cut -f2 -d' ' )
 printf "
 # Server successfully created and ready for use.
 # Please add in the license key and other crucial information to get it ready and then restart the server.
