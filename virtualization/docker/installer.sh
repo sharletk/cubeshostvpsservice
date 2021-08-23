@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Main Installer ###
-INSTALLER_SCRIPT="installer/main.sh"
+INSTALLER_SCRIPT="cubeshostvpsservice/installer/main.sh"
 . $INSTALLER_SCRIPT
 
 checkRoot
