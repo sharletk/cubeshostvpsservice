@@ -42,7 +42,6 @@ git clone https://github.com/citizenfx/cfx-server-data
 mv ~/cfx-server-data/resources ~
 
 conlog Creating server.cfg
-
 cat > server.cfg << EOF
 # Only change the IP if you're using a server with multiple network interfaces, otherwise change the port only.
 endpoint_add_tcp "0.0.0.0:30120"
@@ -123,7 +122,6 @@ sv_licenseKey changeme
 EOF
 
 conwarn Setting up server for starting during boot
-
 cat > /lib/systemd/system/fivem.service << EOF
 [Unit] 
 Description=FiveM Server 
@@ -142,23 +140,21 @@ coninfo Installing tmux
 apt-get install tmux -y
 
 conwarn Creating FiveM server start script
-
 cat > /usr/bin/fivem_startserver.sh << EOF
 #!/bin/bash
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
 EOF
+chmod +x /usr/bin/fivem_startserver.sh
 
 conwarn Creating FiveM server stop script
-
 cat > /usr/bin/fivem_stopserver.sh << EOF
 #!/bin/bash
 tmux send-keys -t FiveM_Server C-c
 tmux kill-session -t "FiveM_Server"
 EOF
-
-chmod +x /usr/bin/fivem_startserver.sh
+chmod +x /usr/bin/fivem_stopserver.sh
 
 conemergency Reloading systemd daemon
 systemctl daemon-reload
