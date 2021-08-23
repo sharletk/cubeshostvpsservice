@@ -6,7 +6,7 @@ apt-get update -y && apt-get upgrade -y
 
 echo "Installing and setting up firewall"
 apt-get install ufw -y
-ufw enable
+echo 'y' | ufw enable
 ufw allow OpenSSH
 ufw allow 30110
 ufw allow 30120
@@ -145,6 +145,8 @@ systemctl daemon-reload
 
 echo "Enabling fivem service on boot"
 systemctl enable fivem
+
+sleep 1
 
 echo "Starting FiveM Server"
 systemctl start fivem
