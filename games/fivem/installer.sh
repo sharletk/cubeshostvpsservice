@@ -39,6 +39,7 @@ apt-get install git -y
 connotice Downloading cfx-server-data
 cd ~
 git clone https://github.com/citizenfx/cfx-server-data
+mv ~/cfx-server-data/resources ~
 
 conlog Creating server.cfg
 
