@@ -1,4 +1,13 @@
 #!/bin/bash
+# Main Installer
+INSTALLER_SCRIPT="installer/main.sh"
+. $INSTALLER_SCRIPT
+
+conlogo
+connotice Starting up script..
+sleep 3
+
+# FiveM Installer
 FIVEM_ARTIFACT_VERSION=4394-572b000db3f5a323039e0915dac64641d1db408e
 
 echo "Updating and upgrading apt"
