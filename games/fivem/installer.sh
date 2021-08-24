@@ -177,7 +177,7 @@ cat > /usr/bin/fivem_startserver.sh << EOF
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh" Enter
-eof
+EOF
 chmod +x /usr/bin/fivem_startserver.sh
 systemctl restart fivem
 EOF
@@ -193,7 +193,7 @@ cat > /usr/bin/fivem_startserver.sh << EOF
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
-eof 
+EOF
 chmod +x /usr/bin/fivem_startserver.sh
 systemctl restart fivem
 EOF
