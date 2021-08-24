@@ -244,6 +244,6 @@ printf "
   • Status
     systemctl status fivem
 
-# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
+# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable.sh' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
 # Follow our knowledgebase article for assistance: 
 "
