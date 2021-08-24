@@ -173,11 +173,11 @@ cat > /usr/bin/fivem_txadminenable.sh << EOF
 #!/bin/bash
 rm /usr/bin/fivem_startserver.sh
 cat > /usr/bin/fivem_startserver.sh << EOF
-  #!/bin/bash
-  tmux new-session -d -s "FiveM_Server"
-  tmux send-keys -t FiveM_Server "cd /root" Enter
-  tmux send-keys -t FiveM_Server "./run.sh" Enter
-  EOF 
+#!/bin/bash
+tmux new-session -d -s "FiveM_Server"
+tmux send-keys -t FiveM_Server "cd /root" Enter
+tmux send-keys -t FiveM_Server "./run.sh" Enter
+eof
 chmod +x /usr/bin/fivem_startserver.sh
 systemctl restart fivem
 EOF
@@ -189,11 +189,11 @@ cat > /usr/bin/fivem_txadmindisable.sh << EOF
 #!/bin/bash
 rm /usr/bin/fivem_startserver.sh
 cat > /usr/bin/fivem_startserver.sh << EOF
-  #!/bin/bash
-  tmux new-session -d -s "FiveM_Server"
-  tmux send-keys -t FiveM_Server "cd /root" Enter
-  tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
-  EOF 
+#!/bin/bash
+tmux new-session -d -s "FiveM_Server"
+tmux send-keys -t FiveM_Server "cd /root" Enter
+tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
+eof 
 chmod +x /usr/bin/fivem_startserver.sh
 systemctl restart fivem
 EOF
