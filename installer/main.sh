@@ -1,6 +1,8 @@
 writeLog() {
+  clear
   parsedData=("${@:3} ")
   printf "\033[0m#\033[0;4m\033[0;1m\033[0;${2}m${1}\033[0m: ${parsedData[*]}\n\n"
+  sleep 1
 }
 
 conlog() {
