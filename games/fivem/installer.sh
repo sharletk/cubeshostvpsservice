@@ -21,6 +21,7 @@ echo 'y' | ufw enable
 ufw allow OpenSSH
 ufw allow 30110
 ufw allow 30120
+ufw allow 40120
 ufw reload
 
 # Install WGET
@@ -166,6 +167,38 @@ tmux kill-session -t "FiveM_Server"
 EOF
 chmod +x /usr/bin/fivem_stopserver.sh
 
+# FiveM txAdmin Enable script
+conwarn Creating FiveM txAdmin enable script
+cat > /usr/bin/fivem_txadminenable.sh << EOF
+#!/bin/bash
+rm /usr/bin/fivem_startserver.sh
+cat > /usr/bin/fivem_startserver.sh << EOT
+#!/bin/bash
+tmux new-session -d -s "FiveM_Server"
+tmux send-keys -t FiveM_Server "cd /root" Enter
+tmux send-keys -t FiveM_Server "./run.sh" Enter
+EOT
+chmod +x /usr/bin/fivem_startserver.sh
+systemctl restart fivem
+EOF
+chmod +x /usr/bin/fivem_txadminenable.sh
+
+# FiveM txAdmin Disable script
+conwarn Creating FiveM txAdmin disable script
+cat > /usr/bin/fivem_txadmindisable.sh << EOF
+#!/bin/bash
+rm /usr/bin/fivem_startserver.sh
+cat > /usr/bin/fivem_startserver.sh << EOT
+#!/bin/bash
+tmux new-session -d -s "FiveM_Server"
+tmux send-keys -t FiveM_Server "cd /root" Enter
+tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
+EOT
+chmod +x /usr/bin/fivem_startserver.sh
+systemctl restart fivem
+EOF
+chmod +x /usr/bin/fivem_txadmindisable.sh
+
 # Reload systemd daemon
 conemergency Reloading systemd daemon
 systemctl daemon-reload
@@ -210,4 +243,7 @@ printf "
     
   • Status
     systemctl status fivem
+
+# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable.sh' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
+# Follow our knowledgebase article for assistance: 
 "
