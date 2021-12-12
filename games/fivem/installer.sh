@@ -6,27 +6,27 @@ INSTALLER_SCRIPT="cubeshostvpsservice-stable/installer/main.sh"
 checkRoot
 conlogo
 connotice Starting up script..
-sleep 3
+sleep 5
 
 ### FiveM Installer ###
 FIVEM_ARTIFACT_VERSION=4394-572b000db3f5a323039e0915dac64641d1db408e
 
 coninfo Updating and upgrading apt
-apt-get update -y && apt-get upgrade -y
+sudo apt-get update -y && sudo apt-get upgrade -y
 
 # Install & Setup UFW Firewall
 coninfo Installing and setting up firewall
-apt-get install ufw -y
+sudo apt-get install ufw -y
 echo 'y' | ufw enable
-ufw allow OpenSSH
-ufw allow 30110
-ufw allow 30120
-ufw allow 40120
-ufw reload
+sudo ufw allow OpenSSH
+sudo ufw allow 30110
+sudo ufw allow 30120
+sudo ufw allow 40120
+sudo ufw reload
 
 # Install WGET
 coninfo Setting up wget
-apt-get install wget -y
+sudo apt-get install wget -y
 
 # Download FiveM Server
 connotice Downloading FiveM Server
@@ -39,13 +39,13 @@ rm fx.tar.xz
 
 # Install GIT
 coninfo Installing git
-apt-get install git -y
+sudo apt-get install git -y
 
 # Download cfx-server-data
 connotice Downloading cfx-server-data
 cd ~
 git clone https://github.com/citizenfx/cfx-server-data
-mv ~/cfx-server-data/resources ~
+sudo mv ~/cfx-server-data/resources ~
 
 # Create configuration file
 conlog Creating server.cfg
@@ -130,7 +130,7 @@ EOF
 
 # Create systemd service file
 conwarn Setting up server for starting during boot
-cat > /lib/systemd/system/fivem.service << EOF
+sudo cat > /lib/systemd/system/fivem.service << EOF
 [Unit]
 Description=FiveM Server
 
@@ -146,30 +146,30 @@ EOF
 
 # Install TMUX
 coninfo Installing tmux
-apt-get install tmux -y
+sudo apt-get install tmux -y
 
 # FiveM start script
 conwarn Creating FiveM server start script
-cat > /usr/bin/fivem_startserver << EOF
+sudo cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
 EOF
-chmod +x /usr/bin/fivem_startserver
+sudo chmod +x /usr/bin/fivem_startserver
 
 # FiveM stop script
 conwarn Creating FiveM server stop script
-cat > /usr/bin/fivem_stopserver << EOF
+sudo cat > /usr/bin/fivem_stopserver << EOF
 #!/bin/bash
 tmux send-keys -t FiveM_Server C-c
 tmux kill-session -t "FiveM_Server"
 EOF
-chmod +x /usr/bin/fivem_stopserver
+sudo chmod +x /usr/bin/fivem_stopserver
 
 # FiveM txAdmin Enable script
 conwarn Creating FiveM txAdmin enable script
-cat > /usr/bin/fivem_txadminenable << EOF
+sudo cat > /usr/bin/fivem_txadminenable << EOF
 #!/bin/bash
 rm /usr/bin/fivem_startserver
 cat > /usr/bin/fivem_startserver << EOT
@@ -181,11 +181,11 @@ EOT
 chmod +x /usr/bin/fivem_startserver
 systemctl restart fivem
 EOF
-chmod +x /usr/bin/fivem_txadminenable
+sudo chmod +x /usr/bin/fivem_txadminenable
 
 # FiveM txAdmin Disable script
 conwarn Creating FiveM txAdmin disable script
-cat > /usr/bin/fivem_txadmindisable << EOF
+sudo cat > /usr/bin/fivem_txadmindisable << EOF
 #!/bin/bash
 rm /usr/bin/fivem_startserver
 cat > /usr/bin/fivem_startserver << EOT
@@ -197,29 +197,29 @@ EOT
 chmod +x /usr/bin/fivem_startserver
 systemctl restart fivem
 EOF
-chmod +x /usr/bin/fivem_txadmindisable
+sudo chmod +x /usr/bin/fivem_txadmindisable
 
 # Reload systemd daemon
 conemergency Reloading systemd daemon
-systemctl daemon-reload
+sudo systemctl daemon-reload
 
 # Enable service file
 connotice Enabling fivem service on boot
-systemctl enable fivem
+sudo systemctl enable fivem
 
 # Cleanup
 coninfo Cleaning up
 cd ~
-rm -rf cubeshostvpsservice-stable stable.zip cfx-server-data
+sudo rm -rf cubeshostvpsservice-stable stable.zip cfx-server-data
 
 sleep 1
 
 # Start service
 conlog Starting FiveM Server
-systemctl start fivem
+sudo systemctl start fivem
 
 # Final message
-VPS_IP=$( hostname -I | cut -f2 -d' ' )
+VPS_IP=$( sudo hostname -I | awk '{print $1}' )
 printf "
 # Server successfully created and ready for use.
 # Please add in the license key and other crucial information to get it ready and then restart the server.
@@ -233,16 +233,16 @@ printf "
 
 # Commands to start, stop and restart server from VPS. #
   • Start
-    systemctl start fivem
+    sudo systemctl start fivem
 
   • Stop
-    systemctl stop fivem
+    sudo systemctl stop fivem
 
   • Restart
-    systemctl restart fivem
+    sudo systemctl restart fivem
 
   • Status
-    systemctl status fivem
+    sudo systemctl status fivem
 
 # Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
 # Follow our knowledgebase article for assistance:
