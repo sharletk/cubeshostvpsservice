@@ -1,6 +1,6 @@
 writeLog() {
   if [[ $3 == true ]]; then
-    clear
+    reset
   fi
   
   parsedData=("${@:4} ")
