@@ -172,12 +172,12 @@ conwarn Creating FiveM txAdmin enable script
 sudo bash -c "cat > /usr/bin/fivem_txadminenable << EOF
 #!/bin/bash
 sudo rm /usr/bin/fivem_startserver
-sudo bash -c 'cat > /usr/bin/fivem_startserver << 'EOT'
+sudo bash -c "cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
 sudo tmux new-session -d -s 'FiveM_Server'
 sudo tmux send-keys -t FiveM_Server 'cd ~' Enter
 sudo tmux send-keys -t FiveM_Server './run.sh' Enter
-EOT'
+EOT"
 sudo chmod +x /usr/bin/fivem_startserver
 sudo systemctl restart fivem
 EOF"
@@ -188,12 +188,12 @@ conwarn Creating FiveM txAdmin disable script
 sudo bash -c "cat > /usr/bin/fivem_txadmindisable << EOF
 #!/bin/bash
 sudo rm /usr/bin/fivem_startserver
-sudo bash -c 'cat > /usr/bin/fivem_startserver << 'EOT'
+sudo bash -c "cat > /usr/bin/fivem_startserver << 'EOT'
 #!/bin/bash
 sudo tmux new-session -d -s 'FiveM_Server'
 sudo tmux send-keys -t FiveM_Server 'cd ~' Enter
 sudo tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
-EOT'
+EOT"
 sudo chmod +x /usr/bin/fivem_startserver
 sudo systemctl restart fivem
 EOF"
