@@ -206,7 +206,7 @@ sudo systemctl enable fivem
 
 # Cleanup
 coninfo Cleaning up
-sudo rm -rf cubeshostvpsservice* cubeshostinstaller.zip cfx-server-data
+sudo rm -rf ~/cubeshostvpsservice* ~/cubeshostinstaller.zip cfx-server-data
 
 sleep 3
 
