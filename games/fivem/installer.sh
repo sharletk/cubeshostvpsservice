@@ -1,11 +1,14 @@
 #!/bin/bash
 ### Main Installer ###
-INSTALLER_SCRIPT="cubeshostvpsservice-stable/installer/main.sh"
+INSTALLER_SCRIPT='cubeshostvpsservice*/installer/main.sh'
 . $INSTALLER_SCRIPT
 
 checkRoot
 conlogo
-connotice Starting up script..
+writeLog NOTICE 96 true Starting up script..
+sudo mkdir -p /var/fivem
+sudo chmod ugo+rwx /var/fivem
+cd /var/fivem
 sleep 5
 
 ### FiveM Installer ###
@@ -30,8 +33,7 @@ sudo apt-get install wget -y
 
 # Download FiveM Server
 connotice Downloading FiveM Server
-cd ~
-wget "https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz"
+wget -O /var/fivem/fx.tar.xz https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz
 
 coninfo Extracting data from downloaded files
 tar -xvf fx.tar.xz
@@ -43,13 +45,12 @@ sudo apt-get install git -y
 
 # Download cfx-server-data
 connotice Downloading cfx-server-data
-cd ~
 git clone https://github.com/citizenfx/cfx-server-data
-sudo mv ~/cfx-server-data/resources ~
+sudo mv ./cfx-server-data/resources /var/fivem
 
 # Create configuration file
 conlog Creating server.cfg
-cat > server.cfg << EOF
+sudo bash -c "cat > /var/fivem/server.cfg << EOF
 # Only change the IP if you're using a server with multiple network interfaces, otherwise change the port only.
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
@@ -126,23 +127,22 @@ set steam_webApiKey ""
 
 # License key for your server (https://keymaster.fivem.net)
 sv_licenseKey changeme
-EOF
+EOF"
 
 # Create systemd service file
-conwarn Setting up server for starting during boot
-sudo cat > /lib/systemd/system/fivem.service << EOF
+conwarn Setting up server for starting during boot..
+sudo bash -c "cat > /lib/systemd/system/fivem.service << EOF
 [Unit]
 Description=FiveM Server
 
 [Service]
 Type=forking
-User=root
 ExecStart=/usr/bin/fivem_startserver
 ExecStop=/usr/bin/fivem_stopserver
 
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF"
 
 # Install TMUX
 coninfo Installing tmux
@@ -150,53 +150,52 @@ sudo apt-get install tmux -y
 
 # FiveM start script
 conwarn Creating FiveM server start script
-sudo cat > /usr/bin/fivem_startserver << EOF
+
+sudo bash -c "cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
-tmux new-session -d -s "FiveM_Server"
-tmux send-keys -t FiveM_Server "cd /root" Enter
-tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
-EOF
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server '/var/fivem/run.sh +exec /var/fivem/server.cfg' Enter
+EOF"
 sudo chmod +x /usr/bin/fivem_startserver
 
 # FiveM stop script
 conwarn Creating FiveM server stop script
-sudo cat > /usr/bin/fivem_stopserver << EOF
+
+sudo bash -c "cat > /usr/bin/fivem_stopserver << EOF
 #!/bin/bash
 tmux send-keys -t FiveM_Server C-c
-tmux kill-session -t "FiveM_Server"
-EOF
+tmux kill-session -t 'FiveM_Server'
+EOF"
 sudo chmod +x /usr/bin/fivem_stopserver
 
 # FiveM txAdmin Enable script
-conwarn Creating FiveM txAdmin enable script
-sudo cat > /usr/bin/fivem_txadminenable << EOF
+conwarn Creating FiveM txAdmin enable scrip
+sudo bash -c "cat > /usr/bin/fivem_txadminenable << EOF
 #!/bin/bash
-rm /usr/bin/fivem_startserver
-cat > /usr/bin/fivem_startserver << EOT
+sudo rm /usr/bin/fivem_startserver
+sudo bash -c \"cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
-tmux new-session -d -s "FiveM_Server"
-tmux send-keys -t FiveM_Server "cd /root" Enter
-tmux send-keys -t FiveM_Server "./run.sh" Enter
-EOT
-chmod +x /usr/bin/fivem_startserver
-systemctl restart fivem
-EOF
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server '/var/fivem/run.sh' Enter
+EOT\"
+sudo chmod +x /usr/bin/fivem_startserver
+sudo systemctl restart fivem
+EOF"
 sudo chmod +x /usr/bin/fivem_txadminenable
 
 # FiveM txAdmin Disable script
 conwarn Creating FiveM txAdmin disable script
-sudo cat > /usr/bin/fivem_txadmindisable << EOF
+sudo bash -c "cat > /usr/bin/fivem_txadmindisable << EOF
 #!/bin/bash
-rm /usr/bin/fivem_startserver
-cat > /usr/bin/fivem_startserver << EOT
+sudo rm /usr/bin/fivem_startserver
+sudo bash -c \"cat > /usr/bin/fivem_startserver << 'EOT'
 #!/bin/bash
-tmux new-session -d -s "FiveM_Server"
-tmux send-keys -t FiveM_Server "cd /root" Enter
-tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
-EOT
-chmod +x /usr/bin/fivem_startserver
-systemctl restart fivem
-EOF
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server '/var/fivem/run.sh +exec /var/fivem/server.cfg' Enter
+EOT\"
+sudo chmod +x /usr/bin/fivem_startserver
+sudo systemctl restart fivem
+EOF"
 sudo chmod +x /usr/bin/fivem_txadmindisable
 
 # Reload systemd daemon
@@ -209,10 +208,9 @@ sudo systemctl enable fivem
 
 # Cleanup
 coninfo Cleaning up
-cd ~
-sudo rm -rf cubeshostvpsservice-stable stable.zip cfx-server-data
+sudo rm -rf ~/cubeshostvpsservice* ~/cubeshostinstaller.zip cfx-server-data
 
-sleep 1
+sleep 3
 
 # Start service
 conlog Starting FiveM Server
@@ -234,16 +232,13 @@ printf "
 # Commands to start, stop and restart server from VPS. #
   • Start
     sudo systemctl start fivem
-
   • Stop
     sudo systemctl stop fivem
-
   • Restart
     sudo systemctl restart fivem
-
   • Status
     sudo systemctl status fivem
 
-# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
+# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'sudo fivem_txadminenable' and use 'sudo tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
 # Follow our knowledgebase article for assistance:
 "
