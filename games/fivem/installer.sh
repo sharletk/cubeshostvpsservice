@@ -152,9 +152,9 @@ sudo apt-get install tmux -y
 conwarn Creating FiveM server start script
 sudo bash -c "cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
-sudo tmux new-session -d -s 'FiveM_Server'
-sudo tmux send-keys -t FiveM_Server 'cd ~' Enter
-sudo tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
 EOF"
 sudo chmod +x /usr/bin/fivem_startserver
 
@@ -162,8 +162,8 @@ sudo chmod +x /usr/bin/fivem_startserver
 conwarn Creating FiveM server stop script
 sudo bash -c "cat > /usr/bin/fivem_stopserver << EOF
 #!/bin/bash
-sudo tmux send-keys -t FiveM_Server C-c
-sudo tmux kill-session -t 'FiveM_Server'
+tmux send-keys -t FiveM_Server C-c
+tmux kill-session -t 'FiveM_Server'
 EOF"
 sudo chmod +x /usr/bin/fivem_stopserver
 
@@ -174,9 +174,9 @@ sudo bash -c "cat > /usr/bin/fivem_txadminenable << EOF
 sudo rm /usr/bin/fivem_startserver
 sudo bash -c \"cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
-sudo tmux new-session -d -s 'FiveM_Server'
-sudo tmux send-keys -t FiveM_Server 'cd ~' Enter
-sudo tmux send-keys -t FiveM_Server './run.sh' Enter
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server './run.sh' Enter
 EOT\"
 sudo chmod +x /usr/bin/fivem_startserver
 sudo systemctl restart fivem
@@ -190,9 +190,9 @@ sudo bash -c "cat > /usr/bin/fivem_txadmindisable << EOF
 sudo rm /usr/bin/fivem_startserver
 sudo bash -c \"cat > /usr/bin/fivem_startserver << 'EOT'
 #!/bin/bash
-sudo tmux new-session -d -s 'FiveM_Server'
-sudo tmux send-keys -t FiveM_Server 'cd ~' Enter
-sudo tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
 EOT\"
 sudo chmod +x /usr/bin/fivem_startserver
 sudo systemctl restart fivem
