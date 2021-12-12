@@ -130,7 +130,7 @@ sv_licenseKey changeme
 EOF"
 
 # Create systemd service file
-conwarn Setting up server for starting during boot
+conwarn Setting up server for starting during boot..
 sudo bash -c "cat > /lib/systemd/system/fivem.service << EOF
 [Unit]
 Description=FiveM Server
@@ -150,6 +150,7 @@ sudo apt-get install tmux -y
 
 # FiveM start script
 conwarn Creating FiveM server start script
+
 sudo bash -c "cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
@@ -159,6 +160,7 @@ sudo chmod +x /usr/bin/fivem_startserver
 
 # FiveM stop script
 conwarn Creating FiveM server stop script
+
 sudo bash -c "cat > /usr/bin/fivem_stopserver << EOF
 #!/bin/bash
 tmux send-keys -t FiveM_Server C-c
@@ -167,7 +169,7 @@ EOF"
 sudo chmod +x /usr/bin/fivem_stopserver
 
 # FiveM txAdmin Enable script
-conwarn Creating FiveM txAdmin enable script
+conwarn Creating FiveM txAdmin enable scrip
 sudo bash -c "cat > /usr/bin/fivem_txadminenable << EOF
 #!/bin/bash
 sudo rm /usr/bin/fivem_startserver
@@ -236,6 +238,7 @@ printf "
     sudo systemctl restart fivem
   • Status
     sudo systemctl status fivem
-# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
+
+# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'sudo fivem_txadminenable' and use 'sudo tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
 # Follow our knowledgebase article for assistance:
 "
