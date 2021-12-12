@@ -36,7 +36,7 @@ connotice Downloading FiveM Server
 wget -O /var/fivem/fx.tar.xz 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
 
 coninfo Extracting data from downloaded files
-tar -xzvf fx.tar.xz
+tar -xvf fx.tar.xz
 rm fx.tar.xz
 
 # Install GIT
@@ -50,7 +50,7 @@ sudo mv ./cfx-server-data/resources /var/fivem
 
 # Create configuration file
 conlog Creating server.cfg
-sudo bash -c "cat > server.cfg << EOF
+sudo bash -c "cat > /var/fivem/server.cfg << EOF
 # Only change the IP if you're using a server with multiple network interfaces, otherwise change the port only.
 endpoint_add_tcp "0.0.0.0:30120"
 endpoint_add_udp "0.0.0.0:30120"
@@ -153,8 +153,7 @@ conwarn Creating FiveM server start script
 sudo bash -c "cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
-tmux send-keys -t FiveM_Server 'cd /var/fivem' Enter
-tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
+tmux send-keys -t FiveM_Server '/var/fivem/run.sh +exec /var/fivem/server.cfg' Enter
 EOF"
 sudo chmod +x /usr/bin/fivem_startserver
 
@@ -175,8 +174,7 @@ sudo rm /usr/bin/fivem_startserver
 sudo bash -c \"cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
-tmux send-keys -t FiveM_Server 'cd /var/fivem' Enter
-tmux send-keys -t FiveM_Server './run.sh' Enter
+tmux send-keys -t FiveM_Server '/var/fivem/run.sh' Enter
 EOT\"
 sudo chmod +x /usr/bin/fivem_startserver
 sudo systemctl restart fivem
@@ -191,8 +189,7 @@ sudo rm /usr/bin/fivem_startserver
 sudo bash -c \"cat > /usr/bin/fivem_startserver << 'EOT'
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
-tmux send-keys -t FiveM_Server 'cd /var/fivem' Enter
-tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
+tmux send-keys -t FiveM_Server '/var/fivem/run.sh +exec /var/fivem/server.cfg' Enter
 EOT\"
 sudo chmod +x /usr/bin/fivem_startserver
 sudo systemctl restart fivem
@@ -209,10 +206,9 @@ sudo systemctl enable fivem
 
 # Cleanup
 coninfo Cleaning up
-cd /var/fivem
 sudo rm -rf cubeshostvpsservice* cubeshostinstaller.zip cfx-server-data
 
-sleep 1
+sleep 3
 
 # Start service
 conlog Starting FiveM Server
