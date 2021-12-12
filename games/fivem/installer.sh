@@ -3,10 +3,11 @@
 INSTALLER_SCRIPT="cubeshostvpsservice*/installer/main.sh"
 . $INSTALLER_SCRIPT
 
+reset
 checkRoot
 conlogo
-connotice Starting up script..
-sleep 3
+writeLog NOTICE 96 true Starting up script..
+sleep 5
 
 ### FiveM Installer ###
 FIVEM_ARTIFACT_VERSION=4394-572b000db3f5a323039e0915dac64641d1db408e
