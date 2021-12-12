@@ -8,6 +8,7 @@ conlogo
 writeLog NOTICE 96 true Starting up script..
 sudo mkdir -p /var/fivem
 sudo chmod ugo+rwx /var/fivem
+cd /var/fivem
 sleep 5
 
 ### FiveM Installer ###
@@ -32,7 +33,6 @@ sudo apt-get install wget -y
 
 # Download FiveM Server
 connotice Downloading FiveM Server
-cd /var/fivem
 wget -O /var/fivem/fx.tar.xz 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
 
 coninfo Extracting data from downloaded files
@@ -45,7 +45,6 @@ sudo apt-get install git -y
 
 # Download cfx-server-data
 connotice Downloading cfx-server-data
-cd /var/fivem
 git clone https://github.com/citizenfx/cfx-server-data
 sudo mv ./cfx-server-data/resources /var/fivem
 
@@ -232,19 +231,4 @@ printf "
     Port: 30120
 ──────────────────────────────
 
-# Commands to start, stop and restart server from VPS. #
-  • Start
-    sudo systemctl start fivem
-
-  • Stop
-    sudo systemctl stop fivem
-
-  • Restart
-    sudo systemctl restart fivem
-
-  • Status
-    sudo systemctl status fivem
-
-# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
-# Follow our knowledgebase article for assistance:
-"
+# C
