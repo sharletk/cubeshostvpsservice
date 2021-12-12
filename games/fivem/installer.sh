@@ -33,7 +33,7 @@ sudo apt-get install wget -y
 # Download FiveM Server
 connotice Downloading FiveM Server
 cd /var/fivem
-wget 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
+wget -O /var/fivem/fx.tar.xz 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
 
 coninfo Extracting data from downloaded files
 tar -xzvf fx.tar.xz
