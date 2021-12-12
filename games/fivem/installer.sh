@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Main Installer ###
-INSTALLER_SCRIPT="cubeshostvpsservice-master/installer/main.sh"
+INSTALLER_SCRIPT="cubeshostvpsservice-stable/installer/main.sh"
 . $INSTALLER_SCRIPT
 
 checkRoot
@@ -37,7 +37,7 @@ coninfo Extracting data from downloaded files
 tar -xvf fx.tar.xz
 rm fx.tar.xz
 
-# Install GIT 
+# Install GIT
 coninfo Installing git
 apt-get install git -y
 
@@ -79,7 +79,7 @@ sets tags "default"
 
 # A valid locale identifier for your server's primary language.
 # For example "en-US", "fr-CA", "nl-NL", "de-DE", "en-GB", "pt-BR"
-sets locale "root-AQ" 
+sets locale "root-AQ"
 # please DO replace root-AQ on the line ABOVE with a real language! :)
 
 # Set an optional server info and connecting banner image url.
@@ -131,14 +131,14 @@ EOF
 # Create systemd service file
 conwarn Setting up server for starting during boot
 cat > /lib/systemd/system/fivem.service << EOF
-[Unit] 
-Description=FiveM Server 
+[Unit]
+Description=FiveM Server
 
 [Service]
 Type=forking
 User=root
-ExecStart=/usr/bin/fivem_startserver.sh
-ExecStop=/usr/bin/fivem_stopserver.sh
+ExecStart=/usr/bin/fivem_startserver
+ExecStop=/usr/bin/fivem_stopserver
 
 [Install]
 WantedBy=multi-user.target
@@ -150,54 +150,54 @@ apt-get install tmux -y
 
 # FiveM start script
 conwarn Creating FiveM server start script
-cat > /usr/bin/fivem_startserver.sh << EOF
+cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
 EOF
-chmod +x /usr/bin/fivem_startserver.sh
+chmod +x /usr/bin/fivem_startserver
 
 # FiveM stop script
 conwarn Creating FiveM server stop script
-cat > /usr/bin/fivem_stopserver.sh << EOF
+cat > /usr/bin/fivem_stopserver << EOF
 #!/bin/bash
 tmux send-keys -t FiveM_Server C-c
 tmux kill-session -t "FiveM_Server"
 EOF
-chmod +x /usr/bin/fivem_stopserver.sh
+chmod +x /usr/bin/fivem_stopserver
 
 # FiveM txAdmin Enable script
 conwarn Creating FiveM txAdmin enable script
-cat > /usr/bin/fivem_txadminenable.sh << EOF
+cat > /usr/bin/fivem_txadminenable << EOF
 #!/bin/bash
-rm /usr/bin/fivem_startserver.sh
-cat > /usr/bin/fivem_startserver.sh << EOT
+rm /usr/bin/fivem_startserver
+cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh" Enter
 EOT
-chmod +x /usr/bin/fivem_startserver.sh
+chmod +x /usr/bin/fivem_startserver
 systemctl restart fivem
 EOF
-chmod +x /usr/bin/fivem_txadminenable.sh
+chmod +x /usr/bin/fivem_txadminenable
 
 # FiveM txAdmin Disable script
 conwarn Creating FiveM txAdmin disable script
-cat > /usr/bin/fivem_txadmindisable.sh << EOF
+cat > /usr/bin/fivem_txadmindisable << EOF
 #!/bin/bash
-rm /usr/bin/fivem_startserver.sh
-cat > /usr/bin/fivem_startserver.sh << EOT
+rm /usr/bin/fivem_startserver
+cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
 tmux new-session -d -s "FiveM_Server"
 tmux send-keys -t FiveM_Server "cd /root" Enter
 tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
 EOT
-chmod +x /usr/bin/fivem_startserver.sh
+chmod +x /usr/bin/fivem_startserver
 systemctl restart fivem
 EOF
-chmod +x /usr/bin/fivem_txadmindisable.sh
+chmod +x /usr/bin/fivem_txadmindisable
 
 # Reload systemd daemon
 conemergency Reloading systemd daemon
@@ -210,7 +210,7 @@ systemctl enable fivem
 # Cleanup
 coninfo Cleaning up
 cd ~
-rm -rf cubeshostvpsservice-master master.zip cfx-server-data
+rm -rf cubeshostvpsservice-stable stable.zip cfx-server-data
 
 sleep 1
 
@@ -240,10 +240,10 @@ printf "
 
   • Restart
     systemctl restart fivem
-    
+
   • Status
     systemctl status fivem
 
-# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable.sh' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
-# Follow our knowledgebase article for assistance: 
+# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
+# Follow our knowledgebase article for assistance:
 "
