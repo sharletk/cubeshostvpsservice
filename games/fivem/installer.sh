@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Main Installer ###
-INSTALLER_SCRIPT="cubeshostvpsservice*/installer/main.sh"
+INSTALLER_SCRIPT='cubeshostvpsservice*/installer/main.sh'
 . $INSTALLER_SCRIPT
 
 reset
@@ -32,7 +32,7 @@ sudo apt-get install wget -y
 # Download FiveM Server
 connotice Downloading FiveM Server
 cd ~
-wget "https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz"
+wget 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
 
 coninfo Extracting data from downloaded files
 tar -xvf fx.tar.xz
@@ -153,9 +153,9 @@ sudo apt-get install tmux -y
 conwarn Creating FiveM server start script
 sudo bash -c "cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
-tmux new-session -d -s "FiveM_Server"
-tmux send-keys -t FiveM_Server "cd ~" Enter
-tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
 EOF"
 sudo chmod +x /usr/bin/fivem_startserver
 
@@ -164,7 +164,7 @@ conwarn Creating FiveM server stop script
 sudo bash -c "cat > /usr/bin/fivem_stopserver << EOF
 #!/bin/bash
 tmux send-keys -t FiveM_Server C-c
-tmux kill-session -t "FiveM_Server"
+tmux kill-session -t 'FiveM_Server'
 EOF"
 sudo chmod +x /usr/bin/fivem_stopserver
 
@@ -173,12 +173,12 @@ conwarn Creating FiveM txAdmin enable script
 sudo bash -c "cat > /usr/bin/fivem_txadminenable << EOF
 #!/bin/bash
 sudo rm /usr/bin/fivem_startserver
-sudo bash -c "cat > /usr/bin/fivem_startserver << EOT
+sudo bash -c 'cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
-tmux new-session -d -s "FiveM_Server"
-tmux send-keys -t FiveM_Server "cd /root" Enter
-tmux send-keys -t FiveM_Server "./run.sh" Enter
-EOT"
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server './run.sh' Enter
+EOT'
 chmod +x /usr/bin/fivem_startserver
 systemctl restart fivem
 EOF"
@@ -189,12 +189,12 @@ conwarn Creating FiveM txAdmin disable script
 sudo bash -c "cat > /usr/bin/fivem_txadmindisable << EOF
 #!/bin/bash
 sudo rm /usr/bin/fivem_startserver
-sudo bash -c "cat > /usr/bin/fivem_startserver << EOT
+sudo bash -c 'cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
-tmux new-session -d -s "FiveM_Server"
-tmux send-keys -t FiveM_Server "cd /root" Enter
-tmux send-keys -t FiveM_Server "./run.sh +exec server.cfg" Enter
-EOT"
+tmux new-session -d -s 'FiveM_Server'
+tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
+EOT'
 chmod +x /usr/bin/fivem_startserver
 systemctl restart fivem
 EOF"
