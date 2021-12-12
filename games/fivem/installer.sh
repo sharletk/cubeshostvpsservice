@@ -7,6 +7,8 @@ reset
 checkRoot
 conlogo
 writeLog NOTICE 96 true Starting up script..
+sudo mkdir -p /var/fivem
+sudo chmod ugo+rwx /var/fivem
 sleep 5
 
 ### FiveM Installer ###
@@ -31,7 +33,7 @@ sudo apt-get install wget -y
 
 # Download FiveM Server
 connotice Downloading FiveM Server
-cd ~
+cd /var/fivem
 wget 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
 
 coninfo Extracting data from downloaded files
@@ -44,7 +46,7 @@ sudo apt-get install git -y
 
 # Download cfx-server-data
 connotice Downloading cfx-server-data
-cd ~
+cd /var/fivem
 git clone https://github.com/citizenfx/cfx-server-data
 sudo mv ~/cfx-server-data/resources ~
 
@@ -209,7 +211,7 @@ sudo systemctl enable fivem
 
 # Cleanup
 coninfo Cleaning up
-cd ~
+cd /var/fivem
 sudo rm -rf cubeshostvpsservice* cubeshostinstaller.zip cfx-server-data
 
 sleep 1
