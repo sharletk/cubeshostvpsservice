@@ -3,7 +3,6 @@
 INSTALLER_SCRIPT='cubeshostvpsservice*/installer/main.sh'
 . $INSTALLER_SCRIPT
 
-reset
 checkRoot
 conlogo
 writeLog NOTICE 96 true Starting up script..
@@ -37,7 +36,7 @@ cd /var/fivem
 wget 'https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/$FIVEM_ARTIFACT_VERSION/fx.tar.xz'
 
 coninfo Extracting data from downloaded files
-tar -xvf fx.tar.xz
+tar -xzvf fx.tar.xz
 rm fx.tar.xz
 
 # Install GIT
@@ -48,7 +47,7 @@ sudo apt-get install git -y
 connotice Downloading cfx-server-data
 cd /var/fivem
 git clone https://github.com/citizenfx/cfx-server-data
-sudo mv ~/cfx-server-data/resources ~
+sudo mv ./cfx-server-data/resources /var/fivem
 
 # Create configuration file
 conlog Creating server.cfg
@@ -155,7 +154,7 @@ conwarn Creating FiveM server start script
 sudo bash -c "cat > /usr/bin/fivem_startserver << EOF
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
-tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server 'cd /var/fivem' Enter
 tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
 EOF"
 sudo chmod +x /usr/bin/fivem_startserver
@@ -177,7 +176,7 @@ sudo rm /usr/bin/fivem_startserver
 sudo bash -c \"cat > /usr/bin/fivem_startserver << EOT
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
-tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server 'cd /var/fivem' Enter
 tmux send-keys -t FiveM_Server './run.sh' Enter
 EOT\"
 sudo chmod +x /usr/bin/fivem_startserver
@@ -193,7 +192,7 @@ sudo rm /usr/bin/fivem_startserver
 sudo bash -c \"cat > /usr/bin/fivem_startserver << 'EOT'
 #!/bin/bash
 tmux new-session -d -s 'FiveM_Server'
-tmux send-keys -t FiveM_Server 'cd ~' Enter
+tmux send-keys -t FiveM_Server 'cd /var/fivem' Enter
 tmux send-keys -t FiveM_Server './run.sh +exec server.cfg' Enter
 EOT\"
 sudo chmod +x /usr/bin/fivem_startserver
