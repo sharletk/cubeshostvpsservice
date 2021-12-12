@@ -42,8 +42,7 @@ condebug() {
 }
 
 conlogo() {
-  echo -e "/*
- *  
+  echo -e "/*  
  * 
  * ┏━━━┓╋╋┏┓╋╋╋╋╋╋╋╋┏┓╋┏┓╋╋╋╋╋┏┓
  * ┃┏━┓┃╋╋┃┃╋╋╋╋╋╋╋╋┃┃╋┃┃╋╋╋╋┏┛┗┓
@@ -51,9 +50,6 @@ conlogo() {
  * ┃┃╋┏┫┃┃┃┏┓┃┃━┫━━┫┃┏━┓┃┏┓┃━━┫┃
  * ┃┗━┛┃┗┛┃┗┛┃┃━╋━━┣┫┃╋┃┃┗┛┣━━┃┗┓
  * ┗━━━┻━━┻━━┻━━┻━━┻┻┛╋┗┻━━┻━━┻━┛
- *
- * Quick and easy installer scripts for VPS service.
- * Visit https://github.com/sharletp/cubeshostvpsservice for more information.
  *
  * Copyright ©️ 2021 Cubes Hosting - All Rights Reserved.
  *
