@@ -227,4 +227,15 @@ printf "
     Port: 30120
 ──────────────────────────────
 
-# C
+# Commands to start, stop and restart server from VPS. #
+  • Start
+    sudo systemctl start fivem
+  • Stop
+    sudo systemctl stop fivem
+  • Restart
+    sudo systemctl restart fivem
+  • Status
+    sudo systemctl status fivem
+# Note: Server Control Panel (txAdmin) is disabled by default, to enable please run 'fivem_txadminenable' and use 'tmux a -t FiveM_Server' to get the passcode to login with txAdmin.
+# Follow our knowledgebase article for assistance:
+"
